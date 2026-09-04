@@ -1132,14 +1132,46 @@ h1, h2, h3, p { margin-top: 0; }
   box-shadow: 0 12px 28px rgba(16, 185, 129, 0.3);
   cursor: default;
 }
+.field-error {
+  display: block;
+  color: #dc2626;
+  font-size: 0.74rem;
+  font-weight: 500;
+  margin-top: 4px;
+  line-height: 1.3;
+}
+input.invalid,
+select.invalid,
+textarea.invalid {
+  border-color: #dc2626 !important;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.12) !important;
+}
+label.consent.has-error {
+  color: #dc2626;
+}
 .form-status {
   min-height: 22px;
-  margin-top: 10px;
+  margin-top: 14px;
   text-align: center;
-  font-size: 0.78rem;
+  font-size: 0.84rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.2s ease;
 }
-.form-status.success { color: var(--green); }
-.form-status.error { color: #dc2626; }
+.form-status.success,
+.form-success-message {
+  color: #065f46;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  padding: 10px 14px;
+}
+.form-status.error,
+.form-error-message {
+  color: #991b1b;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  padding: 10px 14px;
+}
 .honeypot { position: absolute !important; left: -9999px !important; opacity: 0 !important; }
 
 /* FAQ ACCORDION */

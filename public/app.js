@@ -86,8 +86,10 @@ const landingPage = document.querySelector('[name="landing_page"]');
 if (landingPage) landingPage.value = location.href;
 
 async function submitLead(payload, statusElement) {
-  statusElement.textContent = "Submitting your enquiry...";
-  statusElement.className = "form-status";
+  if (statusElement) {
+    statusElement.textContent = "Submitting your enquiry...";
+    statusElement.className = "form-status";
+  }
 
   try {
     const scriptUrl = window.AUTOMATE_ME_CONFIG?.GOOGLE_SCRIPT_URL?.trim() || "";
@@ -115,20 +117,92 @@ async function submitLead(payload, statusElement) {
       throw new Error("Could not submit your enquiry.");
     }
 
-    statusElement.textContent = "Thank you! Your enquiry has been received. We’ll contact you shortly.";
-    statusElement.className = "form-status success";
+    if (statusElement) {
+      statusElement.textContent = "Thank you! We've received your enquiry and will contact you soon.";
+      statusElement.className = "form-status success form-success-message";
+    }
     return true;
   } catch (error) {
-    statusElement.textContent = error.message || "Something went wrong. Please call or WhatsApp us.";
-    statusElement.className = "form-status error";
+    if (statusElement) {
+      statusElement.textContent = error.message || "Something went wrong. Please try again or contact us on WhatsApp.";
+      statusElement.className = "form-status error form-error-message";
+    }
     return false;
   }
 }
 
+function validateField(input) {
+  const label = input.closest("label") || input.parentElement;
+  let errorEl = label.querySelector(".field-error");
+
+  let message = "";
+  if (input.validity.valueMissing) {
+    if (input.type === "checkbox") {
+      message = "Please agree to the consent terms before submitting.";
+    } else if (input.tagName.toLowerCase() === "select") {
+      message = "Please select an option.";
+    } else {
+      const fieldName = input.name === "name" ? "name" : input.name === "message" ? "project requirements" : input.name || "field";
+      message = `Please enter your ${fieldName}.`;
+    }
+  } else if (input.type === "tel" && input.value.trim() && !/^[\d\s\+\-\(\)]{7,}$/.test(input.value.trim())) {
+    message = "Please enter a valid phone number.";
+  } else if (input.type === "email" && input.value.trim() && !input.checkValidity()) {
+    message = "Please enter a valid email address.";
+  }
+
+  if (message) {
+    input.classList.add("invalid");
+    label.classList.add("has-error");
+    if (!errorEl) {
+      errorEl = document.createElement("span");
+      errorEl.className = "field-error";
+      errorEl.setAttribute("role", "alert");
+      label.appendChild(errorEl);
+    }
+    errorEl.textContent = message;
+    return false;
+  } else {
+    clearFieldError(input);
+    return true;
+  }
+}
+
+function clearFieldError(input) {
+  const label = input.closest("label") || input.parentElement;
+  const errorEl = label.querySelector(".field-error");
+  input.classList.remove("invalid");
+  label.classList.remove("has-error");
+  if (errorEl) {
+    errorEl.remove();
+  }
+}
+
 const leadForm = $("#lead-form");
+
+leadForm?.querySelectorAll("input, select, textarea").forEach((field) => {
+  field.addEventListener("input", () => clearFieldError(field));
+  field.addEventListener("change", () => clearFieldError(field));
+});
+
 leadForm?.addEventListener("submit", async (event) => {
   event.preventDefault();
   const form = event.currentTarget;
+
+  const requiredFields = Array.from(form.querySelectorAll("[required]"));
+  let isValid = true;
+  requiredFields.forEach((field) => {
+    if (!validateField(field)) {
+      isValid = false;
+    }
+  });
+
+  if (!isValid) {
+    const firstInvalid = form.querySelector(".invalid");
+    firstInvalid?.focus();
+    return;
+  }
+
   const data = Object.fromEntries(new FormData(form).entries());
   if (data.website) return;
 
@@ -179,7 +253,7 @@ leadForm?.addEventListener("submit", async (event) => {
     button?.classList.remove("is-success");
     if (button) button.disabled = false;
     if (buttonLabel) buttonLabel.textContent = originalLabel;
-  }, 2000);
+  }, 3000);
 });
 
 $$('a[href="#lead-form"]').forEach((link) => {
