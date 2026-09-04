@@ -240,7 +240,7 @@ h1, h2, h3, p { margin-top: 0; }
 .hero {
   position: relative;
   overflow: hidden;
-  padding: 90px 0 0;
+  padding: 90px 0 48px;
   background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
 }
 .mesh { position: absolute; border-radius: 50%; pointer-events: none; z-index: 1; }
@@ -528,8 +528,7 @@ h1, h2, h3, p { margin-top: 0; }
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border: 1px solid var(--border-subtle);
-  border-bottom: 0;
-  border-radius: 20px 20px 0 0;
+  border-radius: 20px;
   background: #ffffff;
   box-shadow: 0 10px 30px -5px rgba(15, 23, 42, 0.06);
   backdrop-filter: blur(12px);
@@ -727,13 +726,24 @@ h1, h2, h3, p { margin-top: 0; }
 }
 .domain-card > b {
   height: 56px;
-  display: grid;
-  place-items: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
   border: 1px solid rgba(37, 99, 235, 0.2);
   border-radius: 14px;
   background: rgba(37, 99, 235, 0.08);
   color: var(--blue);
-  font-size: 0.74rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  line-height: 1;
+}
+.domain-card > b img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  display: block;
 }
 .domain-card h3 { font-size: 0.98rem; margin-bottom: 5px; color: #0f172a; }
 .domain-card p { font-size: 0.8rem; color: var(--text-secondary); margin: 0; }
@@ -1470,7 +1480,7 @@ footer {
 
 @media (min-width: 1440px) {
   .container { width: min(1260px, calc(100% - 64px)); }
-  .hero { padding-top: 105px; }
+  .hero { padding: 105px 0 56px; }
   .hero-grid { gap: 76px; }
   .section-heading h2, .intro-copy h2, .sticky-copy h2, .faq-intro h2, .why-copy h2 { font-size: 3.5rem; }
 }
@@ -1503,7 +1513,7 @@ footer {
   .nav-links.open { display: flex; }
   .nav-links > a:not(.btn) { padding: 12px 14px; min-height: 44px; display: flex; align-items: center; color: #0f172a; }
   .nav-links > a:not(.btn)::after { display: none; }
-  .hero { padding-top: 65px; }
+  .hero { padding: 65px 0 40px; }
   .hero-grid, .split, .deliverable-layout, .why-grid, .lead-grid, .faq-grid { grid-template-columns: 1fr; }
   .hero-visual { min-height: 500px; }
   .trust-strip { grid-template-columns: repeat(2, 1fr); }
@@ -1528,7 +1538,7 @@ footer {
   .brand-copy small { display: none; }
   .brand-copy strong { font-size: 1.15rem; }
   .nav-links { top: 100%; left: 14px; right: 14px; }
-  .hero { padding-top: 52px; }
+  .hero { padding: 52px 0 32px; }
   .hero h1 { font-size: clamp(2.3rem, 10vw, 3.8rem); }
   .hero-text { font-size: 0.94rem; }
   .hero-actions { flex-direction: column; }
